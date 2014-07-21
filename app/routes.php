@@ -20,5 +20,5 @@ Route::get('register', 'AccountController@showRegister');
 // Add user - Registration Route
 Route::post('adduser', 'AccountController@addUser');
 // Activation codes creation
-Route::post('adduser', 'CodesController@generateCode');
+Route::post('generateCodes', 'CodesController@generateCode');
 
