@@ -26,4 +26,10 @@ class HomeController extends BaseController {
 			'db_result' => Initialize::makeTables(),
 		));
 	}
+	public function update()
+	{
+		return View::make('common/home', array(
+			'db_result' => Initialize::updateTables(),
+		));
+	}
 }

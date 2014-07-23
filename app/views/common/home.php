@@ -6,7 +6,7 @@
 <?php endif ?>
 <!-- DATABASE INITIAL SETUP END -->
 
-
+<?php if (Auth::check()) { ?>
 <div class="row">
 	<div class="activation-codes col-md-6 col-sm-6">
 		<div class="jumbotron">
@@ -17,7 +17,8 @@
 				<div class="form-group">
 					<label for="formemebertype">Member Type</label>
 					<select name="membertype" id="formembertype" class="form-control">
-						<option value="admin">Center</option>
+						<option value="admin">Admin</option>
+						<option value="center">Center</option>
 						<option value="member">Member</option>
 					</select>
 				</div>
@@ -37,7 +38,7 @@
 		</div>
 	</div>
 </div>
-
+<?php } ?>
 
 <script>
 

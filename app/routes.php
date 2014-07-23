@@ -15,10 +15,16 @@ Route::get('/', 'HomeController@showHome');
 
 Route::get('init', 'HomeController@initDatabase');
 
+Route::get('update', 'HomeController@update');
+
 Route::get('register', 'AccountController@showRegister');
 
 // Add user - Registration Route
 Route::post('adduser', 'AccountController@addUser');
+// Login route
+Route::post('login', 'AccountController@login');
+// Logout route
+Route::post('logout', 'AccountController@logout');
 // Activation codes creation
 Route::post('generateCodes', 'CodesController@generateCode');
 

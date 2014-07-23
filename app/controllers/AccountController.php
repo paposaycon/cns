@@ -21,16 +21,37 @@ class AccountController extends BaseController {
 	}
 
 	public function addUser() 
-	{	$userdata = array(
-			'firstname' => $_POST['firstname'],
-			'lastname'  => $_POST['lastname'],
-			'email'     => $_POST['email'],
-			// 'activationcode' =>$_POST['activationcode'],
-			'password'  => $_POST['password'],
+	{	
+		$userdata = array(
+			'firstname' => Input::get('firstname'),
+			'lastname'  => Input::get('lastname'),
+			'email'     => Input::get('email'),
+			// 'activationcode' =>Input::get('activationcode'),
+			'password'  => Hash::make(Input::get('password')),
 		);
 
 		$result = User::addUser($userdata);
+
 		return $result;
+	}
+
+	public function login()
+	{
+		$userdata = array(
+			'email' => Input::get('username'),
+			'password' => Input::get('password'),
+		);
+		if (Auth::attempt($userdata))
+		{	
+
+		    return Redirect::to('/');
+		}
+	}
+
+	public function logout()
+	{
+		Auth::logout();
+		return Redirect::to('/');
 	}
 
 }

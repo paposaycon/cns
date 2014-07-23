@@ -23,6 +23,7 @@ class Initialize extends Eloquent {
 			    $table->integer('sponsor');
 			    $table->integer('pointvalue');
 			    $table->integer('registeredby');
+			    $table->string('active');
 			    $table->timestamps();
 			});
 			$result .= 'Table \'users\' created,';
@@ -52,19 +53,15 @@ class Initialize extends Eloquent {
 
     public function scopeupdateTables()
     {
-		if (Schema::hasTable('codes'))
+		if (Schema::hasTable('users'))
 		{
-			Schema::table('codes', function($table)
+			Schema::table('users', function($table)
 			{
-				if (!Schema::hasColumn('codes', 'membertype'))
+				if (!Schema::hasColumn('active', 'membertype'))
 				{
-					$table->string('membertype')->after('id');
+					$table->string('active');
 				}
 
-				if (Schema::hasColumn('codes', 'activationcode'))
-				{
-					$table->unique('activationcode');
-				}
 			});
 
 			return "Tables updated";
