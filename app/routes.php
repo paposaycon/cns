@@ -27,4 +27,6 @@ Route::post('login', 'AccountController@login');
 Route::post('logout', 'AccountController@logout');
 // Activation codes creation
 Route::post('generateCodes', 'CodesController@generateCode');
+//Show Codes route
+Route::post('showcodes', 'CodesController@showCodes');
 

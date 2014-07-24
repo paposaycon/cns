@@ -24,6 +24,7 @@ class Initialize extends Eloquent {
 			    $table->integer('pointvalue');
 			    $table->integer('registeredby');
 			    $table->string('active');
+			    $table->string('remember_token', 100);
 			    $table->timestamps();
 			});
 			$result .= 'Table \'users\' created,';
@@ -57,9 +58,9 @@ class Initialize extends Eloquent {
 		{
 			Schema::table('users', function($table)
 			{
-				if (!Schema::hasColumn('active', 'membertype'))
+				if (!Schema::hasColumn('users', 'remember_token'))
 				{
-					$table->string('active');
+					$table->string('remember_token', 100);
 				}
 
 			});

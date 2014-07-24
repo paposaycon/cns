@@ -17,22 +17,43 @@ class AccountController extends BaseController {
 
 	public function showRegister()
 	{
+		Auth::logout();
+		Session::flush();
 		return View::make('account/register');
 	}
 
 	public function addUser() 
 	{	
-		$userdata = array(
-			'firstname' => Input::get('firstname'),
-			'lastname'  => Input::get('lastname'),
-			'email'     => Input::get('email'),
-			// 'activationcode' =>Input::get('activationcode'),
-			'password'  => Hash::make(Input::get('password')),
-		);
+		$codevalidation = Codes::validateCode(Input::get('activationcode'));
 
-		$result = User::addUser($userdata);
+		if($codevalidation != false){
 
-		return $result;
+			foreach ($codevalidation as $codeinfo) {
+				$membertype = $codeinfo['membertype'];
+				$sponsor_id = $codeinfo['sponsor'];
+				$code_id    = $codeinfo['code_id'];
+			}
+
+			$codeupdate = Codes::updateCode($code_id, 'used');
+
+			$codedata = array(
+				'status' => 1,
+			);
+			$userdata = array(
+				'membertype'=> $membertype,
+				'firstname' => Input::get('firstname'),
+				'lastname'  => Input::get('lastname'),
+				'email'     => Input::get('email'),
+				'password'  => Hash::make(Input::get('password')),
+			);
+
+			$result = User::addUser($userdata);
+
+			return $result;
+		}
+		else {
+			return 'fail';
+		}
 	}
 
 	public function login()
@@ -41,17 +62,17 @@ class AccountController extends BaseController {
 			'email' => Input::get('username'),
 			'password' => Input::get('password'),
 		);
-		if (Auth::attempt($userdata))
-		{	
-
-		    return Redirect::to('/');
-		}
+		
+		if (User::login($userdata))
+		{
+			return 'verified';
+		}		
 	}
 
 	public function logout()
-	{
-		Auth::logout();
-		return Redirect::to('/');
+	{	
+		User::logout();
+		return 'success';
 	}
 
 }

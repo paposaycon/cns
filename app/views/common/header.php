@@ -134,18 +134,20 @@
 				},
 				success:function(result){
 				    if(result == 'verified') {
-				    	$('#login_modal').modal('hide')
-				    	$('.main-menu').html('<a class="btn-login btn btn-sm btn-primary navbar-btn pull-right">Logout</a><a class="btn-login btn btn-sm btn-primary navbar-btn pull-right" data-toggle="modal" data-target="#register_modal">Register</a>')
+				    	location.reload(true); 
 				    }
 				}
 			});
 		});
-	});
 
-	$('.btn-logout').click(function () {
-		$.ajax({
-			url:"<?= action('AccountController@logout') ?>",
-			type: 'POST'
+		$('.btn-logout').click(function () {
+			$.ajax({
+				url:"<?= action('AccountController@logout') ?>",
+				type: 'POST',
+				success:function(){
+					location.reload(true); 
+				}
+			});
 		});
 	});
 </script>

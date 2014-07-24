@@ -23,8 +23,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'remember_token');
 
-	public static function addUser($data) {
-
+	public static function addUser($data) 
+	{
 		$user = new User;
 
 		foreach ($data as $key => $value) {
@@ -33,6 +33,25 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		
 		$user->save();
 
-		return 'Success';
+		return 'The account has been registered.';
 	}
+
+	public static function login($data)
+	{
+		if (Auth::attempt($data))
+		{	
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public static function logout()
+	{
+		Auth::logout();
+		Session::flush();
+	}
+	
 }
