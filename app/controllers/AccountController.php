@@ -39,6 +39,7 @@ class AccountController extends BaseController {
 			);
 			$userdata = array(
 				'membertype'=> $membertype,
+				'username'  => Input::get('email'),
 				'firstname' => Input::get('firstname'),
 				'lastname'  => Input::get('lastname'),
 				'email'     => Input::get('email'),
@@ -68,7 +69,22 @@ class AccountController extends BaseController {
 				'lastname' => Input::get('lastname'),
 				'sex' => Input::get('sex'),
 			);
-			return json_encode(User::updateUser(Auth::user()->id, $userdata));
+
+			$input['username'] = Input::get('username');
+
+			// Must not already exist in the `email` column of `users` table
+			$rules = array('username' => 'unique:users,username');
+
+			$validator = Validator::make($input, $rules);
+
+			if ($validator->fails()) 
+			{
+			    return 'Username already exists.';
+			}
+			else
+			{
+				return json_encode(User::updateUser(Auth::user()->id, $userdata));
+			}
 		}
 		if($field == 'password')
 		{

@@ -10,7 +10,7 @@ if (Auth::check())
 	ID: <?= Config::get('mlm_config.id_prefix') ?><?= Auth::user()->id ?> <br>
 	Username: <?= Auth::user()->username ?> <br>
 	Email: <?= Auth::user()->email ?> <br>
-	Password: Hidden <br>
+	Password: ****** <br>
 	First Name: <?= Auth::user()->firstname ?> <br>
 	Middle Name: <?= Auth::user()->middlename ?> <br>
 	Last Name: <?= Auth::user()->lastname ?> <br>
@@ -169,8 +169,9 @@ else
 			validateName(firstname) || addError('*First name should be at least 2 characters');
 			validateName(middlename) || addError('*Last name should be at least 2 characters');
 			validateName(lastname) || addError('*Last name should be at least 2 characters');
-			errormsg == '' && updateProfile();
 			$('.editprofile-error').html('<div class="alert alert-danger">' + errormsg + '</div>');
+			errormsg == '' && updateProfile();
+			
 
 			function updateProfile() {
 				$.ajax({
@@ -190,6 +191,9 @@ else
 					success:function(result){
 					    if (result == 'true') {
 					    	location.reload(true); 
+					    }
+					    else {
+					    	$('.editprofile-error').html('<h4 style="color: red;">' + result + '</h4>');
 					    }
 					}
 				});
