@@ -11,14 +11,16 @@
 |
 */
 
-Route::get('/', 'HomeController@showHome');
+Route::get('/', array('as' => 'home', 'uses' => 'HomeController@showHome'));
 
 Route::get('init', 'HomeController@initDatabase');
 
 Route::get('update', 'HomeController@update');
 
-Route::get('register', 'AccountController@showRegister');
-
+// User Profile
+Route::get('user/profile', array('as' => 'profile', 'uses' => 'AccountController@showProfile'));
+//Update User Profile
+Route::post('user/updateprofile', array('as' => 'updateprofile', 'uses' => 'AccountController@updateProfile'));
 // Add user - Registration Route
 Route::post('adduser', 'AccountController@addUser');
 //Check User
@@ -26,7 +28,7 @@ Route::post('getusers', 'AccountController@getUsers');
 // Login route
 Route::post('login', 'AccountController@login');
 // Logout route
-Route::post('logout', 'AccountController@logout');
+Route::get('logout', array('as' => 'logout', 'uses' => 'AccountController@logout'));
 // Activation codes creation
 Route::post('generateCodes', 'CodesController@generateCode');
 //Show Codes route

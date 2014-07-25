@@ -15,11 +15,9 @@ class AccountController extends BaseController {
 	|
 	*/
 
-	public function showRegister()
+	public function showProfile()
 	{
-		Auth::logout();
-		Session::flush();
-		return View::make('account/register');
+		return View::make('account/profile');
 	}
 
 	public function addUser() 
@@ -58,6 +56,34 @@ class AccountController extends BaseController {
 		}
 	}
 
+	public function updateProfile()
+	{
+		$field = Input::get('field');
+
+		if ($field == 'common') {
+			$userdata = array(
+				'username' => Input::get('username'),
+				'firstname' => Input::get('firstname'),
+				'middlename' => Input::get('middlename'),
+				'lastname' => Input::get('lastname'),
+				'sex' => Input::get('sex'),
+			);
+			return json_encode(User::updateUser(Auth::user()->id, $userdata));
+		}
+		if($field == 'password')
+		{
+			if (Hash::check(Input::get('currentpassword'), Auth::user()->password))
+			{
+			   $userdata = array('password' => Hash::make(Input::get('newpassword')));
+			   return json_encode(User::updateUser(Auth::user()->id, $userdata));
+			}
+			else
+			{
+				return 'Current Password is Invalid';
+			}
+		}
+	}
+
 	public function getUsers()
 	{
 		return json_encode(User::getUsers());
@@ -65,18 +91,30 @@ class AccountController extends BaseController {
 
 	public function login()
 	{
-		$userdata = array(
+		$userdata1 = array(
+			'username' => Input::get('username'),
+			'password' => Input::get('password'),
+		);
+		$userdata2 = array(
 			'email' => Input::get('username'),
 			'password' => Input::get('password'),
 		);
 		
-		if (User::login($userdata))
+		if (User::login($userdata1))
 		{
 			return 'verified';
 		}
 		else
 		{
-			return 'Either your Username/Email or password is incorrect.';
+			if (User::login($userdata2))
+			{
+				return 'verified';
+			}
+			else
+			{
+				return 'Either your Username/Email or password is incorrect.';				
+			}
+
 		}		
 	}
 
@@ -84,7 +122,7 @@ class AccountController extends BaseController {
 	{	
 		User::logout();
 		Session::flush();
-		return 'success';
+		return Redirect::to('/');
 	}
 
 }

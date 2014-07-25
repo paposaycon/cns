@@ -9,6 +9,7 @@ class Initialize extends Eloquent {
 			Schema::create('users',	function($table)
 			{
 			    $table->increments('id');
+			    $table->string('username');
 			    $table->string('membertype');
 			    $table->string('email');
 			    $table->unique('email');
@@ -62,6 +63,11 @@ class Initialize extends Eloquent {
 		// $user->save();
 
 		// return 'Added';
+
+		Schema::table('users', function($table)
+		{
+		    $table->string('username')->after('id');
+		});
 
     }
 

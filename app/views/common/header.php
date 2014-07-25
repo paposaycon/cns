@@ -14,11 +14,11 @@
 <header>
 	<nav class="navbar navbar-inverse" role="navigation">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/">MLM</a>
+			<a class="navbar-brand" href="<?= route('home'); ?>">MLM</a>
 		</div>
 		<div class="main-menu">
 			<?php if (Auth::check()) { ?>
-				<a class="btn-login btn-logout btn btn-sm btn-primary navbar-btn pull-right">Logout</a>
+				<a href="<?= route('logout') ?>"class="btn-login btn-logout btn btn-sm btn-primary navbar-btn pull-right">Logout</a>
 			<?php } else { ?>
 				<a class="btn-login btn btn-sm btn-primary navbar-btn pull-right" data-toggle="modal" data-target="#login_modal">Login</a>
 			<?php } ?>
@@ -243,8 +243,13 @@
 				return pattern.test(data);
 			}
 			function validatePassword(data) {
-				if (data.length > 7) {
-					return true;
+				if (data != undefined){
+					if (data.length > 7) {
+						return true;
+					}
+				}
+				else {
+					return false;
 				}
 			}
 			function validateSponsor(data) {
