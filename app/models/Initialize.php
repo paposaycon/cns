@@ -54,19 +54,15 @@ class Initialize extends Eloquent {
 
     public function scopeupdateTables()
     {
-		if (Schema::hasTable('users'))
-		{
-			Schema::table('users', function($table)
-			{
-				if (!Schema::hasColumn('users', 'remember_token'))
-				{
-					$table->string('remember_token', 100);
-				}
+		// $user = new User;
 
-			});
+		// $user->firstname = 'Adrian';
+		// $user->password =  Hash::make('');
 
-			return "Tables updated";
-		}
+		// $user->save();
+
+		// return 'Added';
+
     }
 
 }

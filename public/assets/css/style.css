@@ -1,3 +1,13 @@
+/*General*/
+
+
+
+/*Backgrounds*/
+.box-dark {
+	background: rgba(0,0,0,0.9);
+}
+
+/*NOT SURE*/
 .btn-login {
 	margin-right: 10px;
 }

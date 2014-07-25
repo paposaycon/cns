@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="activation-codes col-md-6 col-sm-6">
+	<div class="activation-codes col-md-12 col-sm-12">
 		<div class="jumbotron">
 			<div class="form">
 				<div class="title">
@@ -31,7 +31,7 @@
 </div>
 
 <div class="row">
-	<div class="activation-codes col-md-6 col-sm-6">
+	<div class="activation-codes col-md-12 col-sm-12">
 		<div class="jumbotron">
 			<div class="title">
 				<h3><strong>Available Codes</strong></h3>
@@ -54,21 +54,25 @@
 	</div>
 </div>
 
+
 <script>
 
 	$(document).ready(function () {
-		var htmldata;
-		$.ajax({
-			url:"<?= action('CodesController@showCodes') ?>",
-			type: 'POST',
-			success:function(result){
-				var data = JSON.parse(result);
-				$.each(data, function(i, item) {
-					htmldata += '<tr><td>' + item.membertype + '</td><td>' + item.activationcode + '</td></tr>';
-				});
-				$('.activation-codes tbody').html(htmldata);
-			}
-		});
+		refreshCodes();
+		function refreshCodes() {
+			$.ajax({
+				url:"<?= action('CodesController@showCodes') ?>",
+				type: 'POST',
+				success:function(result){
+					var htmldata;
+					var data = JSON.parse(result);
+					$.each(data, function(i, item) {
+						htmldata += '<tr><td>' + item.membertype + '</td><td>' + item.activationcode + '</td></tr>';
+					});
+					$('.activation-codes tbody').html(htmldata);
+				}
+			});
+		}
 
 		$('#generate-codes').click(function () {
 

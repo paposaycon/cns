@@ -1,0 +1,1 @@
+<h3>Welcome! <small>Hit "Login" to start.</small></h3>

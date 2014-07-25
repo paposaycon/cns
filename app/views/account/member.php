@@ -1,0 +1,1 @@
+<h2><b>Welcome! <?= Auth::user()->firstname ?> <?= Auth::user()->middlename?> <?= Auth::user()->lastname ?> <small>ID: <?= Config::get("mlm_config.id_prefix")?><?= Auth::user()->id ?></small></b></h2>

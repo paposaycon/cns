@@ -22,7 +22,7 @@ class Codes extends Eloquent {
 	public static function getCodes()
 	{
 		$id = Auth::user()->id;
-		$codes = Codes::where('sponsor', '=', $id)->take(100)->get();
+		$codes = Codes::where('sponsor', '=', $id)->where('status', '!=', 1)->take(100)->get();
 
 		foreach ($codes as $code) {
 			$data[] = array(

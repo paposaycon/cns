@@ -21,6 +21,8 @@ Route::get('register', 'AccountController@showRegister');
 
 // Add user - Registration Route
 Route::post('adduser', 'AccountController@addUser');
+//Check User
+Route::post('getusers', 'AccountController@getUsers');
 // Login route
 Route::post('login', 'AccountController@login');
 // Logout route

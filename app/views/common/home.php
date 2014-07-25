@@ -6,14 +6,23 @@
 <?php endif ?>
 <!-- DATABASE INITIAL SETUP END -->
 
-<?php if (Auth::check()) { 
-	echo View::make('modules.codesgenerator')->render();
+<?php 
+if (Auth::check()) 
+{ 
+	if ($membertype == 'admin' || $membertype == 'superuser') 
+	{
+		echo View::make('account.admin')->render();
+	}
+	else
+	{
+		echo View::make('account.member')->render();
+	}
 }
-else { ?>
-
-	<h3>Welcome! <small>Hit "Login" to start.</small></h3>
-
-<?php } ?>
+else 
+{
+	echo View::make('account.guest')->render();
+} 
+?>
 
 
 

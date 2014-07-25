@@ -50,6 +50,7 @@
 						</div>						
 					</div>
 				</div>
+				<div class="login-error"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -95,6 +96,22 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-6">
+							<label for="direct_upline">Direct Upline</label>
+							<button class="btn btn-sm btn-danger btn-dul">Click me</button>
+							<select name="direct_upline" class="form-control" id="direct_upline" style="display:none;">
+								
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="sponsor">Sponsor</label>
+							<button class="btn btn-sm btn-danger btn-sponsor">Click me</button>
+							<select class="form-control" name="sponsor" id="sponsor" style="display:none;">
+								
+							</select>
+						</div>						
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6">
 							<label for="password">Password</label>
 							<input type="password" class="form-control" name="password" id="password">
 						</div>
@@ -130,11 +147,15 @@
 					password : $password,
 				},
 				beforeSend:function(){
-					$('#submit-login').html('Verifying..')
+					$('#submit-login').html('Verifying..');
 				},
 				success:function(result){
 				    if(result == 'verified') {
 				    	location.reload(true); 
+				    }
+				    else {
+				    	$('.login-error').html('<h4 style="color: red;">' + result + '</h4>');
+				    	$('#submit-login').html('Login');
 				    }
 				}
 			});
@@ -156,6 +177,34 @@
 <script>
 	$(document).ready(function () {
 
+		$('.btn-dul').click(function () {
+			getUsers('#direct_upline');
+			$(this).fadeOut('fast');
+		});
+		$('.btn-sponsor').click(function () {
+			getUsers('#sponsor');
+			$(this).fadeOut('fast');
+		});
+		function getUsers(insert) {
+			$.ajax({
+				url:"<?= action('AccountController@getUsers') ?>",
+				type: 'POST',
+				data: {
+
+				},
+				success:function(result){
+					var data = JSON.parse(result);
+					var htmldata;
+					$.each(data, function(i, item) {
+						htmldata += '<option value="' + item.id + '">' + item.name + ' - ID: <?= Config::get("mlm_config.id_prefix"); ?>' + item.id + '</option>';
+					});
+					$(insert).html(htmldata);
+					$(insert).slideDown('fast');
+				}
+
+			});
+		}
+
 		$('#submit-registration').click(function () {
 
 			var $firstname = $('#firstname').val(),
@@ -164,12 +213,16 @@
 				$activationcode = $('#activationcode').val(),
 				$password = $('#password').val(),
 				$confirmpassword = $('#confirmpassword').val(),
+				$direct_upline = $('#direct_upline').val(),
+				$sponsor = $('#sponsor').val(),
 				alertbox = $('#register_modal .reg-alert'),
 				errormsg = '';
 
 			validateName($firstname) || addError('*First name should be at least 2 characters');
 			validateName($lastname) || addError('*Last name should be at least 2 characters');
 			validateEmail($email) || addError('*Invalid Email');
+			validateSponsor($direct_upline) || addError('*Please select an Upline');
+			validateSponsor($sponsor) || addError('*Please select a Sponsor');
 			validatePassword($password) || addError('*Password should be at least 8 characters');
 			$password == $confirmpassword || addError('*password does not match');
 			
@@ -194,6 +247,16 @@
 					return true;
 				}
 			}
+			function validateSponsor(data) {
+				if(data != null){
+					if (data.length != 0) {
+						return true;
+					}
+				}
+				else {
+					return false;
+				}
+			}
 			function signUp(){
 				$.ajax({
 					url:"<?= action('AccountController@addUser') ?>",
@@ -204,14 +267,17 @@
 						email : $email,
 						activationcode : $activationcode,
 						password : $password,
+						direct_upline : $direct_upline,
+						sponsor : $sponsor,
 					},
 					beforeSend:function(){
 						$('.registration-form').slideUp('fast');
 					},
 					success:function(result){
 					    $('.registration-form input').val('');
-					    $('#register_modal .modal-body').html('<div class="alert">' + result + '</div>');
+					    $('#register_modal .modal-body').html('<div class="alert">' + result + '</div><?php if (Auth::check()) { ?><h3><b>Refresh page to update codes status.</b></h3><?php } ?>');
 					    $('#submit-registration').fadeOut('fast');
+
 					}
 
 				});

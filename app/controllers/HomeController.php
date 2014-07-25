@@ -16,8 +16,19 @@ class HomeController extends BaseController {
 	*/
 
 	public function showHome()
-	{
-		return View::make('common/home');
+	{	
+		if (Auth::check()) 
+		{ 
+			$membertype = Auth::user()->membertype; 
+		}
+		else
+		{
+			$membertype = 'guest';
+		}
+
+		return View::make('common/home', array(
+			'membertype' =>  $membertype,
+		));
 	}
 
 	public function initDatabase()
@@ -26,6 +37,7 @@ class HomeController extends BaseController {
 			'db_result' => Initialize::makeTables(),
 		));
 	}
+	
 	public function update()
 	{
 		return View::make('common/home', array(

@@ -36,6 +36,22 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return 'The account has been registered.';
 	}
 
+	public static function getUsers()
+	{
+		$data = false;
+
+		$users = User::all();
+		foreach ($users as $user) {
+			$data[] = array(
+				'id'      => $user['id'],
+				'name'    => $user['firstname'] . " " . $user['middlename'] . " " . $user['lastname'],
+				'email'   => $user['email'],
+			);
+		}
+
+		return $data;
+	}
+
 	public static function login($data)
 	{
 		if (Auth::attempt($data))

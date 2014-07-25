@@ -45,6 +45,8 @@ class AccountController extends BaseController {
 				'lastname'  => Input::get('lastname'),
 				'email'     => Input::get('email'),
 				'password'  => Hash::make(Input::get('password')),
+				'directupline' => Input::get('direct_upline'),
+				'sponsor'   => Input::get('sponsor'),
 			);
 
 			$result = User::addUser($userdata);
@@ -52,8 +54,13 @@ class AccountController extends BaseController {
 			return $result;
 		}
 		else {
-			return 'fail';
+			return 'Code entered is Unknown or Already used.';
 		}
+	}
+
+	public function getUsers()
+	{
+		return json_encode(User::getUsers());
 	}
 
 	public function login()
@@ -66,12 +73,17 @@ class AccountController extends BaseController {
 		if (User::login($userdata))
 		{
 			return 'verified';
+		}
+		else
+		{
+			return 'Either your Username/Email or password is incorrect.';
 		}		
 	}
 
 	public function logout()
 	{	
 		User::logout();
+		Session::flush();
 		return 'success';
 	}
 
