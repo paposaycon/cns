@@ -34,3 +34,5 @@ Route::post('generateCodes', 'CodesController@generateCode');
 //Show Codes route
 Route::post('showcodes', 'CodesController@showCodes');
 
+//Member Tree
+Route::post('user/downline', array('as' => 'getdownline', 'uses' => 'MembertreeController@getDownline'));

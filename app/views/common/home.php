@@ -1,4 +1,4 @@
-<?php require_once Config::get('mlm_config.get_header'); ?>
+<?php echo View::make('common.header')->render(); ?>
 
 <!-- DATABASE INITIAL SETUP -->
 <?php if (isset($db_result)): ?>
@@ -26,4 +26,4 @@ else
 
 
 
-<?php require_once Config::get('mlm_config.get_footer'); ?>
+<?php echo View::make('common.footer')->render(); ?>

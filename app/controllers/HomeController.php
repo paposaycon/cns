@@ -31,6 +31,8 @@ class HomeController extends BaseController {
 		));
 	}
 
+
+// Temporary code
 	public function initDatabase()
 	{
 		return View::make('common/home', array(

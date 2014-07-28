@@ -4,8 +4,8 @@
 if (Auth::check()) 
 { 
 ?>
-
-<section id="profile" class="col-md-6 col-sm-6">
+<div class="row">
+<section id="profile" class="col-md-8 col-sm-8">
 	<h3>Account Details</h3>
 	ID: <?= Config::get('mlm_config.id_prefix') ?><?= Auth::user()->id ?> <br>
 	Username: <?= Auth::user()->username ?> <br>
@@ -121,9 +121,8 @@ if (Auth::check())
 	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos quis modi optio vero sit, accusantium suscipit voluptatibus commodi nisi id nobis harum esse nam inventore consequatur ut, quo dolore animi. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa atque ducimus quisquam maxime, quos officiis velit cum iure quidem inventore hic voluptatibus facilis esse nisi commodi accusantium ut! Ut, similique!
 </section>
 
-<section>
-<?= View::make('modules.navigation')->render(); ?>
-</section>
+<?php echo View::make('common.sidebar-right')->render(); ?>
+</div>
 <?php }
 else 
 {
@@ -194,6 +193,7 @@ else
 					    }
 					    else {
 					    	$('.editprofile-error').html('<h4 style="color: red;">' + result + '</h4>');
+					    	$('#submit-profile-changes').html('Save Changes');
 					    }
 					}
 				});
