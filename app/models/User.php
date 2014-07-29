@@ -71,6 +71,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 			$data['lvl1'][] = array(
 				'id' => $user->id,
 				'name' => $user->firstname . ' ' . $user->lastname,
+				'pointvalue' => $user->pointvalue,
 			);
 			// LEVEL 2 MEMBERS
 			$lvl2 = User::where('directupline', '=', $user->id)->get();
@@ -79,6 +80,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 				$data['lvl2'][] = array(
 					'id' => $user->id,
 					'name' => $user->firstname . ' ' . $user->lastname,
+					'pointvalue' => $user->pointvalue,
 				);
 
 				// LEVEL 3 MEMBERS
@@ -88,6 +90,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 					$data['lvl3'][] = array(
 						'id' => $user->id,
 						'name' => $user->firstname . ' ' . $user->lastname,
+						'pointvalue' => $user->pointvalue,
 					);
 
 					// LEVEL 4 MEMBERS
@@ -97,6 +100,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 						$data['lvl4'][] = array(
 							'id' => $user->id,
 							'name' => $user->firstname . ' ' . $user->lastname,
+							'pointvalue' => $user->pointvalue,
 						);
 
 						// LEVEL 5 MEMBERS
@@ -106,7 +110,129 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 							$data['lvl5'][] = array(
 								'id' => $user->id,
 								'name' => $user->firstname . ' ' . $user->lastname,
+								'pointvalue' => $user->pointvalue,
 							);
+
+							// LEVEL 6 MEMBERS
+							$lvl6 = User::where('directupline', '=', $user->id)->get();
+
+							foreach ($lvl6 as $user) {
+								$data['lvl6'][] = array(
+									'id' => $user->id,
+									'name' => $user->firstname . ' ' . $user->lastname,
+									'pointvalue' => $user->pointvalue,
+								);
+
+								// LEVEL 7 MEMBERS
+								$lvl7 = User::where('directupline', '=', $user->id)->get();
+
+								foreach ($lvl7 as $user) {
+									$data['lvl7'][] = array(
+										'id' => $user->id,
+										'name' => $user->firstname . ' ' . $user->lastname,
+										'pointvalue' => $user->pointvalue,
+									);
+
+									// LEVEL 8 MEMBERS
+									$lvl8 = User::where('directupline', '=', $user->id)->get();
+
+									foreach ($lvl8 as $user) {
+										$data['lvl8'][] = array(
+											'id' => $user->id,
+											'name' => $user->firstname . ' ' . $user->lastname,
+											'pointvalue' => $user->pointvalue,
+										);
+
+										// LEVEL 9 MEMBERS
+										$lvl9 = User::where('directupline', '=', $user->id)->get();
+
+										foreach ($lvl9 as $user) {
+											$data['lvl9'][] = array(
+												'id' => $user->id,
+												'name' => $user->firstname . ' ' . $user->lastname,
+												'pointvalue' => $user->pointvalue,
+											);
+
+											// LEVEL 10 MEMBERS
+											$lvl10 = User::where('directupline', '=', $user->id)->get();
+
+											foreach ($lvl10 as $user) {
+												$data['lvl10'][] = array(
+													'id' => $user->id,
+													'name' => $user->firstname . ' ' . $user->lastname,
+													'pointvalue' => $user->pointvalue,
+												);
+
+												// LEVEL 11 MEMBERS
+												$lvl11 = User::where('directupline', '=', $user->id)->get();
+
+												foreach ($lvl11 as $user) {
+													$data['lvl11'][] = array(
+														'id' => $user->id,
+														'name' => $user->firstname . ' ' . $user->lastname,
+														'pointvalue' => $user->pointvalue,
+													);
+
+													// LEVEL 12 MEMBERS
+													$lvl12 = User::where('directupline', '=', $user->id)->get();
+
+													foreach ($lvl12 as $user) {
+														$data['lvl12'][] = array(
+															'id' => $user->id,
+															'name' => $user->firstname . ' ' . $user->lastname,
+															'pointvalue' => $user->pointvalue,
+														);
+
+														// LEVEL 13 MEMBERS
+														$lvl13 = User::where('directupline', '=', $user->id)->get();
+
+														foreach ($lvl13 as $user) {
+															$data['lvl13'][] = array(
+																'id' => $user->id,
+																'name' => $user->firstname . ' ' . $user->lastname,
+																'pointvalue' => $user->pointvalue,
+															);
+
+															// LEVEL 14 MEMBERS
+															$lvl14 = User::where('directupline', '=', $user->id)->get();
+
+															foreach ($lvl14 as $user) {
+																$data['lvl14'][] = array(
+																	'id' => $user->id,
+																	'name' => $user->firstname . ' ' . $user->lastname,
+																	'pointvalue' => $user->pointvalue,
+																);
+
+																// LEVEL 15 MEMBERS
+																$lvl15 = User::where('directupline', '=', $user->id)->get();
+
+																foreach ($lvl15 as $user) {
+																	$data['lvl15'][] = array(
+																		'id' => $user->id,
+																		'name' => $user->firstname . ' ' . $user->lastname,
+																		'pointvalue' => $user->pointvalue,
+																	);
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}

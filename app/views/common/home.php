@@ -1,4 +1,4 @@
-<?php echo View::make('common.header')->render(); ?>
+<?= View::make('common.header', array('page_title' => $page_title))->render(); ?>
 
 <!-- DATABASE INITIAL SETUP -->
 <?php if (isset($db_result)): ?>
@@ -9,7 +9,11 @@
 <?php 
 if (Auth::check()) 
 { 
-	if ($membertype == 'admin' || $membertype == 'superuser') 
+	if($membertype == 'superuser')
+	{
+		echo View::make('account.superuser')->render();
+	}
+	elseif ($membertype == 'admin') 
 	{
 		echo View::make('account.admin')->render();
 	}
@@ -24,6 +28,4 @@ else
 } 
 ?>
 
-
-
-<?php echo View::make('common.footer')->render(); ?>
+<?= View::make('common.footer')->render(); ?>

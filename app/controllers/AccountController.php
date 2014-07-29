@@ -17,7 +17,10 @@ class AccountController extends BaseController {
 
 	public function showProfile()
 	{
-		return View::make('account/profile');
+		return View::make('account/profile', array(
+			'page_title' => 'Profile',
+
+		));
 	}
 
 	public function addUser() 
@@ -138,7 +141,8 @@ class AccountController extends BaseController {
 	{	
 		User::logout();
 		Session::flush();
-		return Redirect::to('/');
+
+		return 'Logged out';
 	}
 
 }

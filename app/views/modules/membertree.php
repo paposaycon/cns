@@ -5,24 +5,28 @@
 <table class="unilevel table table-bordered">
 	<thead>
 		<tr>
-			<td>Level</td>
-			<td>Member Count</td>
+			<td><b>Level</b></td>
+			<td><b>Member Count</b></td>
+			<td><b>PV</b></td>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td class="level">1</td>
 			<td class="count"> <button class="btn btn-sm btn-danger show-member lvl1">0</td>
+			<td class="pv">0</td>
 		</tr>
 	</tbody>
 </table>
 
 <script>
 	$(document).ready(function () {
-		function makeLevel(level, count, data){
+
+		function makeLevel(level, count, data, pv){
 			$('#modal-lvl' + level).html(makeModal(level,data));
-			return '<tr><td>' + level + '</td><td><button class="btn btn-sm btn-danger show-member lvl1" data-toggle="modal" data-target="#memberlist' + level + '">' + count + '</button></td></tr>';
+			return '<tr><td>' + level + '</td><td><button class="btn btn-sm btn-danger show-member lvl1" data-toggle="modal" data-target="#memberlist' + level + '">' + count + '</button></td><td class="pv">' + pv + '</td></tr>';
 		}
+
 		function makeModal(level, data){
 			var $output = '';
 			$output += '<div class="modal fade" id="memberlist' + level + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
@@ -53,64 +57,36 @@
 
 			return $output;
 		}
+
 		$.ajax({
 			url:"<?= route('getdownline') ?>",
 			type: 'POST',
 			success:function(result){
 				
 				var data = JSON.parse(result);
-				var htmldata = '', 
-					memberlistdata = '', 
-					memberlistdata2 ='',
-					memberlistdata3 ='',
-					memberlistdata4 ='',
-					memberlistdata5 ='';
-				var itemcount = 0,
-					itemcount2 = 0,
-					itemcount3 = 0,
-					itemcount4 = 0,
-					itemcount5 = 0;
+				var htmldata = '';
 
-				if(data.hasOwnProperty('lvl1')){
-					$.each(data.lvl1, function(i, item) {
-						itemcount = itemcount + 1;
-						memberlistdata += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
-						
-					});
-				}
-				if(data.hasOwnProperty('lvl2')){
-					$.each(data.lvl2, function(i, item) {
-						itemcount2 = itemcount2 + 1;
-						memberlistdata2 += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
-						
-					});
-				}
-				if(data.hasOwnProperty('lvl3')){
-					$.each(data.lvl3, function(i, item) {
-						itemcount3 = itemcount3 + 1;
-						memberlistdata3 += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
-						
-					});
-				}
-				if(data.hasOwnProperty('lvl4')){
-					$.each(data.lvl4, function(i, item) {
-						itemcount4 = itemcount4 + 1;
-						memberlistdata4 += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
-						
-					});
-				}
-				if(data.hasOwnProperty('lvl5')){
-					$.each(data.lvl5, function(i, item) {
-						itemcount5 = itemcount5 + 1;
-						memberlistdata5 += '<tr><td>' + item.id + '</td><td>' + item.name + '</td></tr>';
-						
+				<?php for ($i=1; $i < 16; $i++) { ?>
+				var itemcount<?= $i ?> = 0;
+				var memberlistdata<?= $i ?> = '';
+				var pv<?= $i ?> = 0;
+
+				if(data.hasOwnProperty('lvl<?= $i ?>')){
+					$.each(data.lvl<?= $i ?>, function(i, item) {
+						itemcount<?= $i ?> = itemcount<?= $i ?> + 1;
+						memberlistdata<?= $i ?> += '<tr><td><?= Config::get("mlm_config.id_prefix") ?>' + item.id + '</td><td>' + item.name + '</td></tr>';
+						pv<?= $i ?> = item.pointvalue;
 					});
 				}
 
-				// The unilevel table is stacked here
-				htmldata = makeLevel(1,itemcount,memberlistdata) + makeLevel(2,itemcount2,memberlistdata2) + makeLevel(3,itemcount3,memberlistdata3) + makeLevel(4,itemcount4,memberlistdata4) + makeLevel(5,itemcount5,memberlistdata5);
+				// The unilevel table is stacked and is rendered here using the makeLevel() function
+				htmldata += makeLevel(<?= $i ?>,itemcount<?= $i ?>,memberlistdata<?= $i ?>,pv<?= $i ?>);
+				<?php } ?>
+
+				
 				$('.unilevel tbody').html(htmldata);
 			}
 		});
+
 	});
 </script>

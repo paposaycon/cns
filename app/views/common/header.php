@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>MLM</title>
+	<title><?= $page_title ?> - MLM</title>
 	<?= HTML::style('/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css') ?>
 	<?= HTML::style('/assets/css/style.css') ?>
 	
@@ -14,15 +14,44 @@
 <header>
 	<nav class="navbar navbar-inverse" role="navigation">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="<?= route('home'); ?>">MLM</a>
-		</div>
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			    <span class="sr-only">Toggle navigation</span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+		    </button>
+		    <a class="navbar-brand" href="<?= route('home'); ?>">MLM</a>
+	    </div>
 		<div class="main-menu">
-			<?php if (Auth::check()) { ?>
-				<a href="<?= route('logout') ?>"class="btn-login btn-logout btn btn-sm btn-primary navbar-btn pull-right">Logout</a>
-			<?php } else { ?>
-				<a class="btn-login btn btn-sm btn-primary navbar-btn pull-right" data-toggle="modal" data-target="#login_modal">Login</a>
-			<?php } ?>
-			<a class="btn-login btn btn-sm btn-primary navbar-btn pull-right" data-toggle="modal" data-target="#register_modal">Register</a>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			    <ul class="nav navbar-nav">
+			        <li class="<?php if($page_title == 'Home') { echo 'active'; } ?>"><a href="<?= route('home'); ?>">Home</a></li>
+			        <li class="<?php if($page_title == 'Profile') { echo 'active'; } ?>"><a href="<?= route('profile'); ?>">Profile</a></li>
+			        <!-- <li class="dropdown">
+			            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+			            <ul class="dropdown-menu" role="menu">
+			                <li><a href="#">Action</a></li>
+			                <li><a href="#">Another action</a></li>
+			                <li><a href="#">Something else here</a></li>
+			                <li class="divider"></li>
+			                <li><a href="#">Separated link</a></li>
+			                <li class="divider"></li>
+			                <li><a href="#">One more separated link</a></li>
+			            </ul>
+			        </li> -->
+			    </ul>
+
+			    <ul class="nav navbar-nav navbar-right">
+			        <li><button type="button" class="btn-login btn btn-primary navbar-btn" data-toggle="modal" data-target="#register_modal">Register</button></li>
+			        <li>
+			        <?php if (Auth::check()) { ?>
+			        <button id="btn-logout" type="button" href="<?= route('logout') ?>"class="btn-login btn btn-primary navbar-btn">Logout</button>
+			        <?php } else { ?>
+			        <button type="button" class="btn-login btn btn-primary navbar-btn" data-toggle="modal" data-target="#login_modal">Login</button>
+			        <?php } ?>
+			        </li>
+			    </ul>
 		</div>
 	</nav>	 
 </header>
@@ -135,6 +164,7 @@
 <!-- Login script -->
 <script>
 	$(document).ready(function () {
+
 		$('#submit-login').click(function () {
 			var $username = $('#username').val(),
 				$password = $('#login-password').val();
@@ -161,7 +191,7 @@
 			});
 		});
 
-		$('.btn-logout').click(function () {
+		$('#btn-logout').click(function () {
 			$.ajax({
 				url:"<?= action('AccountController@logout') ?>",
 				type: 'POST',

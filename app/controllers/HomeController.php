@@ -28,6 +28,7 @@ class HomeController extends BaseController {
 
 		return View::make('common/home', array(
 			'membertype' =>  $membertype,
+			'page_title' => 'Home',
 		));
 	}
 

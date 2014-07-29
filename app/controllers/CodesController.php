@@ -17,7 +17,6 @@ class CodesController extends BaseController {
 			$result = $result + Codes::makeCode($data);	
 		}
 
-
 		Mail::send('emails.codes', $data, function($message)
 		{
 			$message->from('admin@adzbite.com', 'Adzbite Solutions');
@@ -31,6 +30,27 @@ class CodesController extends BaseController {
 	{
 		$result = Codes::getCodes();
 		return json_encode($result);
+	}
+
+	// Model -> Codes_user_limit.php
+	public function allocateCodes()
+	{
+		$id = Input::get('id');
+		$count = Input::get('count');
+		$allocated_by = Auth::user()->id;
+
+		$data = array(
+			'id' => $id,
+			'count' => $count,
+			'allocated_by' => $allocated_by,
+		);
+
+		return CodesUserLimit::allocateCodes($data);
+	}
+
+	public function getAllocations()
+	{
+		return json_encode(CodesUserLimit::getAllocations(10));
 	}
 
 }

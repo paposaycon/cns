@@ -1,4 +1,4 @@
-<?php require_once Config::get('mlm_config.get_header'); ?>
+<?= View::make('common.header', array('page_title' => $page_title))->render(); ?>
 
 <?php 
 if (Auth::check()) 
@@ -258,4 +258,5 @@ else
 		});
 	});
 </script>
-<?php require_once Config::get('mlm_config.get_footer'); ?>
+
+<?= View::make('common.footer')->render(); ?>

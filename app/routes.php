@@ -28,11 +28,21 @@ Route::post('getusers', 'AccountController@getUsers');
 // Login route
 Route::post('login', 'AccountController@login');
 // Logout route
-Route::get('logout', array('as' => 'logout', 'uses' => 'AccountController@logout'));
+Route::post('logout', array('as' => 'logout', 'uses' => 'AccountController@logout'));
+
+#
+#
+# CODES AREA
+#
+#
 // Activation codes creation
-Route::post('generateCodes', 'CodesController@generateCode');
-//Show Codes route
+Route::post('generatecodes', 'CodesController@generateCode');
+// Show Codes route
 Route::post('showcodes', 'CodesController@showCodes');
+// Codes Allocation
+Route::post('allocatecodes', 'CodesController@allocateCodes');
+// Get Allocated codes history
+Route::post('getAllocations', 'CodesController@getAllocations');
 
 //Member Tree
 Route::post('user/downline', array('as' => 'getdownline', 'uses' => 'MembertreeController@getDownline'));
