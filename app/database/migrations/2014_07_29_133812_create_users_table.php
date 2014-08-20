@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration {
 			    $table->unique('username');
 			    $table->string('membertype');
 			    $table->string('email');
-			    $table->unique('email');
 			    $table->string('password');
 			    $table->string('firstname', 50);
 			    $table->string('middlename', 50);
@@ -29,8 +28,10 @@ class CreateUsersTable extends Migration {
 			    $table->string('civilstatus');
 			    $table->date('birthdate');
 			    $table->integer('directupline');
+			    $table->integer('position');
 			    $table->integer('sponsor');
 			    $table->integer('pointvalue');
+			    $table->integer('codecount');
 			    $table->integer('registeredby');
 			    $table->string('active');
 			    $table->string('remember_token', 100);

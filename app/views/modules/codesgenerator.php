@@ -13,14 +13,6 @@
 						<option value="member">Member</option>
 					</select>
 				</div>
-				<div class="form-group">
-					<label for="count">How many codes do you need?</label>
-					<select class="form-control" id="count" name="count">
-						<?php for ($i=1; $i < 11; $i++) { ?>
-							<option value="<?= $i ?>"><?= $i ?></option>
-						<?php } ?>
-					</select>
-				</div>
 			</div>
 			<div class='generate-form-btn' style="text-align: center;">
 				<button class="btn btn-lg btn-primary" id="generate-codes">Hit me!</button>

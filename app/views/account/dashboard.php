@@ -10,7 +10,7 @@
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="pull-right"><span class="glyphicon glyphicon-chevron-down" style="padding-top: 10px;"></span></a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse">
+    <div id="collapseOne" class="panel-collapse collapse in">
       <div class="panel-body">
         <?php	
     			echo View::make('modules.codesgenerator')->render();

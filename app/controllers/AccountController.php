@@ -25,6 +25,17 @@ class AccountController extends BaseController {
 
 	public function addUser() 
 	{	
+		$input['username'] = Input::get('username');
+
+		// Must not already exist in the `username` column of `users` table
+		$rules = array('username' => 'unique:users,username');
+
+		$validator = Validator::make($input, $rules);
+		if ($validator->fails()) 
+		{
+		    return 'Username already exists.';
+		}
+
 		$codevalidation = Codes::validateCode(Input::get('activationcode'));
 
 		if($codevalidation != false){
@@ -42,10 +53,10 @@ class AccountController extends BaseController {
 			);
 			$userdata = array(
 				'membertype'=> $membertype,
-				'username'  => Input::get('email'),
+				'username'  => Input::get('username'),
 				'firstname' => Input::get('firstname'),
 				'lastname'  => Input::get('lastname'),
-				'email'     => Input::get('email'),
+				'email'     => Input::get('username'), //Temporary - need to change to email
 				'password'  => Hash::make(Input::get('password')),
 				'directupline' => Input::get('direct_upline'),
 				'sponsor'   => Input::get('sponsor'),

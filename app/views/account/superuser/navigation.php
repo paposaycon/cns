@@ -31,9 +31,9 @@
 		<table id="recent-allocations" class="table .table-hover">
 			<thead>
 				<tr>
-					<td>To</td>
-					<td>Count</td>
 					<td>From</td>
+					<td>Count</td>
+					<td>To</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -47,17 +47,15 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="btn btn-sm btn-danger" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="color: #fff !important;">
+        <a class="btn btn-sm btn-danger" data-toggle="collapse" data-parent="#accordion" href="#sales-entry" style="color: #fff !important;">
           <span class="glyphicon glyphicon-sort-by-attributes"></span> Sales Entry
         </a>
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="pull-right"><span class="glyphicon glyphicon-chevron-down" style="padding-top: 10px;"></span></a>
+        <a data-toggle="collapse" data-parent="#accordion" href="#sales-entry" class="pull-right"><span class="glyphicon glyphicon-chevron-down" style="padding-top: 10px;"></span></a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
+    <div id="sales-entry" class="panel-collapse collapse">
       <div class="panel-body">
-        <?php	
-			
-		?>
+		
       </div>
     </div>
   </div>
@@ -133,7 +131,7 @@
 					var htmldata = '';
 					var data = JSON.parse(result);
 					$.each(data, function(i, item) {
-						htmldata += '<tr><td><?= Config::get("mlm_config.id_prefix")?>' + item.id + '</td><td>' + item.count + '</td><td><?= Config::get("mlm_config.id_prefix")?>' + item.allocated_by + '</td></tr>';
+						htmldata += '<tr><td><?= Config::get("mlm_config.id_prefix")?>' + item.allocated_by + '</td><td>' + item.count + '</td><td><?= Config::get("mlm_config.id_prefix")?>' + item.id + '</td></tr>';
 					});
 
 					$('#recent-allocations tbody').html(htmldata);

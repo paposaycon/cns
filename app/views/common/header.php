@@ -115,8 +115,8 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-6">
-							<label for="email">Email</label>
-							<input type="email" class="form-control" name="email" id="email"  autocomplete="off">
+							<label for="reg-username">Username</label>
+							<input type="text" class="form-control" name="reg-username" id="reg-username"  autocomplete="off">
 						</div>
 						<div class="form-group col-md-6">
 							<label for="activationcode">Activation Code</label>
@@ -239,7 +239,7 @@
 
 			var $firstname = $('#firstname').val(),
 				$lastname = $('#lastname').val(),
-				$email = $('#email').val(),
+				$username = $('#reg-username').val(),
 				$activationcode = $('#activationcode').val(),
 				$password = $('#password').val(),
 				$confirmpassword = $('#confirmpassword').val(),
@@ -250,7 +250,7 @@
 
 			validateName($firstname) || addError('*First name should be at least 2 characters');
 			validateName($lastname) || addError('*Last name should be at least 2 characters');
-			validateEmail($email) || addError('*Invalid Email');
+			validateUsername($username) || addError('*Username should be at least 6 characters');
 			validateSponsor($direct_upline) || addError('*Please select an Upline');
 			validateSponsor($sponsor) || addError('*Please select a Sponsor');
 			validatePassword($password) || addError('*Password should be at least 8 characters');
@@ -266,6 +266,10 @@
 			}
 			function validateName(data) {
 				var pattern = /^[a-z0-9]{2,}/i;
+				return pattern.test(data);
+			}
+			function validateUsername(data) {
+				var pattern = /^[a-z0-9]{6,}/i;
 				return pattern.test(data);
 			}
 			function validateEmail(data) {
@@ -299,7 +303,7 @@
 					data: {
 						firstname : $firstname,
 						lastname : $lastname,
-						email : $email,
+						username : $username,
 						activationcode : $activationcode,
 						password : $password,
 						direct_upline : $direct_upline,
@@ -310,7 +314,7 @@
 					},
 					success:function(result){
 					    $('.registration-form input').val('');
-					    $('#register_modal .modal-body').html('<div class="alert">' + result + '</div><?php if (Auth::check()) { ?><h3><b>Refresh page to update codes status.</b></h3><?php } ?>');
+					    $('#register_modal .modal-body').html('<div class="alert alert-warning">' + result + '</div><?php if (Auth::check()) { ?><h3><b>Refresh page to update codes status.</b></h3><?php } ?>');
 					    $('#submit-registration').fadeOut('fast');
 
 					}

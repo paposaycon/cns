@@ -21,9 +21,18 @@ class CodesUserLimit extends Eloquent {
 	{
 		$codes_user_limit = DB::table('codes_user_limit')
 					->orderBy('ref', 'desc')
-                    ->take($limit)
+                   	->take($limit)
                     ->get();
 
 		return $codes_user_limit;
+	}
+
+	public static function getCount()
+	{
+		$count = DB::table('codes_user_limit')
+					->where('id', '=', Auth::user()->id)
+                    ->get();
+
+        return $count;
 	}
 }

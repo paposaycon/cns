@@ -24,7 +24,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $hidden = array('password', 'remember_token');
 
 	public static function addUser($data) 
-	{
+	{	
+		$user = DB::table('users')->where('name', 'John')->first();
+		var_dump($user->name);
+
 		$user = new User;
 
 		foreach ($data as $key => $value) {
@@ -61,6 +64,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		}
 
 		return $data;
+	}
+
+	public static function checkDownlineLeg($id)
+	{
+		$position = DB::table('users')->where('id', $id)->pluck('position');
+
+		if ($position) {
+			# code...
+		}
+
 	}
 
 	public static function getDownline($id)

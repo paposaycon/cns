@@ -6,7 +6,7 @@ class CodesController extends BaseController {
 	{
 		$data = array();
 		$result = '';
-		$count = Input::get('count');
+		$count = CodesUserLimit::getCount();
 
 		for ($i=0; $i < $count; $i++) { 
 
