@@ -10,7 +10,7 @@
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="pull-right"><span class="glyphicon glyphicon-chevron-down" style="padding-top: 10px;"></span></a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
+    <div id="collapseOne" class="panel-collapse collapse">
       <div class="panel-body">
         <?php	
     			echo View::make('modules.codesgenerator')->render();
@@ -19,11 +19,11 @@
     </div>
   </div>
 
-  <div class="panel panel-default">
+  <!-- <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
         <a class="btn btn-sm btn-success" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="color: #fff !important;">
-          <span class="glyphicon glyphicon-sort-by-attributes"> Unilevel
+          <span class="glyphicon glyphicon-sort-by-attributes"></span> Member Tree 
         </a>
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="pull-right"><span class="glyphicon glyphicon-chevron-down" style="padding-top: 10px;"></span></a>
       </h4>
@@ -35,7 +35,7 @@
     		?>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 </section>

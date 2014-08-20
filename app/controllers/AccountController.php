@@ -25,17 +25,41 @@ class AccountController extends BaseController {
 
 	public function addUser() 
 	{	
-		$input['username'] = Input::get('username');
+		//PREPARING AND VALIDATING DATA FOR ENTRY
+		$data_validator = Validator::make(
+		    array(
+		    	'username'  => Input::get('username'),
+		        'firstname' =>  Input::get('firstname'),
+		        'lastname'  => Input::get('lastname'),
+		        'password'  => Input::get('password'),
+		        // 'email'     => Input::get('username'), //Temporary - need to change to email
+		        'directupline' => Input::get('direct_upline'),
+				'sponsor'   => Input::get('sponsor'),
+		    ),
+		    array(
+		        'username'  => 'required|min:4|unique:users,username',
+		        'firstname' => 'required|min:2',
+		        'lastname'  => 'required|min:2',
+		        'password'  => 'required|min:8',
+		        // 'email'     => 'required|email|unique:users',
+		        'directupline' => 'required',
+		        'sponsor'   => 'required',
+		    )
+		);
 
-		// Must not already exist in the `username` column of `users` table
-		$rules = array('username' => 'unique:users,username');
-
-		$validator = Validator::make($input, $rules);
-		if ($validator->fails()) 
+		if ($data_validator->fails())
 		{
-		    return 'Username already exists.';
+		    $messages = $data_validator->messages();
+		    $error = '';
+		    foreach ($messages->all() as $message)
+			{
+			    $error .= $message . '<br>';
+			}
+			return $error;
+			exit;
 		}
-
+		
+		// Code validation
 		$codevalidation = Codes::validateCode(Input::get('activationcode'));
 
 		if($codevalidation != false){
@@ -51,6 +75,17 @@ class AccountController extends BaseController {
 			$codedata = array(
 				'status' => 1,
 			);
+
+			$position = (int)User::checkPosition(Input::get('direct_upline'));
+
+			if ($position >= 2) {
+				return 'Direct Upline(' .  Config::get('mlm_config.id_prefix') . Input::get('direct_upline') . ') already has the "left" and "right" member. Please select a different upline.';
+				exit;
+			}
+			if ($position < 2) {
+				$position = $position + 1;
+			}
+
 			$userdata = array(
 				'membertype'=> $membertype,
 				'username'  => Input::get('username'),
@@ -60,6 +95,7 @@ class AccountController extends BaseController {
 				'password'  => Hash::make(Input::get('password')),
 				'directupline' => Input::get('direct_upline'),
 				'sponsor'   => Input::get('sponsor'),
+				'position'  => $position,
 			);
 
 			$result = User::addUser($userdata);

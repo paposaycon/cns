@@ -46,3 +46,5 @@ Route::post('getAllocations', 'CodesController@getAllocations');
 
 //Member Tree
 Route::post('user/downline', array('as' => 'getdownline', 'uses' => 'MembertreeController@getDownline'));
+//Show Member Tree Page
+Route::get('user/members', array('as' => 'members', 'uses' => 'MembertreeController@showMemberTree'));

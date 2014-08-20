@@ -28,6 +28,7 @@
 			    <ul class="nav navbar-nav">
 			        <li class="<?php if($page_title == 'Home') { echo 'active'; } ?>"><a href="<?= route('home'); ?>">Home</a></li>
 			        <li class="<?php if($page_title == 'Profile') { echo 'active'; } ?>"><a href="<?= route('profile'); ?>">Profile</a></li>
+			        <li class="<?php if($page_title == 'Members') { echo 'active'; } ?>"><a href="<?= route('members'); ?>">Members</a></li>
 			        <!-- <li class="dropdown">
 			            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
 			            <ul class="dropdown-menu" role="menu">
@@ -269,7 +270,7 @@
 				return pattern.test(data);
 			}
 			function validateUsername(data) {
-				var pattern = /^[a-z0-9]{6,}/i;
+				var pattern = /^[a-z0-9]{4,}/i;
 				return pattern.test(data);
 			}
 			function validateEmail(data) {

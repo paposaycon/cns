@@ -25,9 +25,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	public static function addUser($data) 
 	{	
-		$user = DB::table('users')->where('name', 'John')->first();
-		var_dump($user->name);
-
 		$user = new User;
 
 		foreach ($data as $key => $value) {
@@ -37,6 +34,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		$user->save();
 
 		return 'The account has been registered.';
+	}
+
+	public static function checkPosition($id)
+	{
+		$position = DB::table('users')->where('directupline', '=', $id)->max('position');
+
+		return $position;
 	}
 
 	public static function updateUser($id, $data)
@@ -66,16 +70,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $data;
 	}
 
-	public static function checkDownlineLeg($id)
-	{
-		$position = DB::table('users')->where('id', $id)->pluck('position');
-
-		if ($position) {
-			# code...
-		}
-
-	}
-
+	// This is the Unilevel downline
 	public static function getDownline($id)
 	{
 		$users = User::where('directupline', '=', $id)->get();
@@ -85,6 +80,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 				'id' => $user->id,
 				'name' => $user->firstname . ' ' . $user->lastname,
 				'pointvalue' => $user->pointvalue,
+				'position' => $user->position,
 			);
 			// LEVEL 2 MEMBERS
 			$lvl2 = User::where('directupline', '=', $user->id)->get();
@@ -94,6 +90,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 					'id' => $user->id,
 					'name' => $user->firstname . ' ' . $user->lastname,
 					'pointvalue' => $user->pointvalue,
+					'position' => $user->position,
 				);
 
 				// LEVEL 3 MEMBERS
@@ -104,6 +101,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 						'id' => $user->id,
 						'name' => $user->firstname . ' ' . $user->lastname,
 						'pointvalue' => $user->pointvalue,
+						'position' => $user->position,
 					);
 
 					// LEVEL 4 MEMBERS
@@ -114,6 +112,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 							'id' => $user->id,
 							'name' => $user->firstname . ' ' . $user->lastname,
 							'pointvalue' => $user->pointvalue,
+							'position' => $user->position,
 						);
 
 						// LEVEL 5 MEMBERS
@@ -124,6 +123,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 								'id' => $user->id,
 								'name' => $user->firstname . ' ' . $user->lastname,
 								'pointvalue' => $user->pointvalue,
+								'position' => $user->position,
 							);
 
 							// LEVEL 6 MEMBERS
@@ -134,6 +134,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 									'id' => $user->id,
 									'name' => $user->firstname . ' ' . $user->lastname,
 									'pointvalue' => $user->pointvalue,
+									'position' => $user->position,
 								);
 
 								// LEVEL 7 MEMBERS
@@ -144,6 +145,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 										'id' => $user->id,
 										'name' => $user->firstname . ' ' . $user->lastname,
 										'pointvalue' => $user->pointvalue,
+										'position' => $user->position,
 									);
 
 									// LEVEL 8 MEMBERS
@@ -154,6 +156,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 											'id' => $user->id,
 											'name' => $user->firstname . ' ' . $user->lastname,
 											'pointvalue' => $user->pointvalue,
+											'position' => $user->position,
 										);
 
 										// LEVEL 9 MEMBERS
@@ -164,6 +167,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 												'id' => $user->id,
 												'name' => $user->firstname . ' ' . $user->lastname,
 												'pointvalue' => $user->pointvalue,
+												'position' => $user->position,
 											);
 
 											// LEVEL 10 MEMBERS
@@ -174,6 +178,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 													'id' => $user->id,
 													'name' => $user->firstname . ' ' . $user->lastname,
 													'pointvalue' => $user->pointvalue,
+													'position' => $user->position,
 												);
 
 												// LEVEL 11 MEMBERS
@@ -184,6 +189,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 														'id' => $user->id,
 														'name' => $user->firstname . ' ' . $user->lastname,
 														'pointvalue' => $user->pointvalue,
+														'position' => $user->position,
 													);
 
 													// LEVEL 12 MEMBERS
@@ -194,6 +200,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 															'id' => $user->id,
 															'name' => $user->firstname . ' ' . $user->lastname,
 															'pointvalue' => $user->pointvalue,
+															'position' => $user->position,
 														);
 
 														// LEVEL 13 MEMBERS
@@ -204,6 +211,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 																'id' => $user->id,
 																'name' => $user->firstname . ' ' . $user->lastname,
 																'pointvalue' => $user->pointvalue,
+																'position' => $user->position,
 															);
 
 															// LEVEL 14 MEMBERS
@@ -214,6 +222,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 																	'id' => $user->id,
 																	'name' => $user->firstname . ' ' . $user->lastname,
 																	'pointvalue' => $user->pointvalue,
+																	'position' => $user->position,
 																);
 
 																// LEVEL 15 MEMBERS
@@ -224,6 +233,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 																		'id' => $user->id,
 																		'name' => $user->firstname . ' ' . $user->lastname,
 																		'pointvalue' => $user->pointvalue,
+																		'position' => $user->position,
 																	);
 
 																}

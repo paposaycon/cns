@@ -1,4 +1,6 @@
-<div class="col-sm-12 membertree-table">
+<?= View::make('common.header', array('page_title' => $page_title))->render(); ?>
+
+<section class="col-sm-8 membertree-table">
 	<div class="row">
 		<div class="col-sm-1"></div>
 		<div class="col-sm-1"></div>
@@ -83,4 +85,8 @@
 		<div class="col-sm-1">6</div>
 		<div class="col-sm-1"></div>
 	</div>
-</div>
+</section>
+
+<?php echo View::make('common.sidebar-right')->render(); ?>
+
+<?= View::make('common.footer')->render(); ?>
