@@ -27,8 +27,10 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    <ul class="nav navbar-nav">
 			        <li class="<?php if($page_title == 'Home') { echo 'active'; } ?>"><a href="<?= route('home'); ?>">Home</a></li>
+			        <?php if (Auth::check()){  ?>
 			        <li class="<?php if($page_title == 'Profile') { echo 'active'; } ?>"><a href="<?= route('profile'); ?>">Profile</a></li>
 			        <li class="<?php if($page_title == 'Members') { echo 'active'; } ?>"><a href="<?= route('members'); ?>">Members</a></li>
+			        <?php } ?>
 			        <!-- <li class="dropdown">
 			            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
 			            <ul class="dropdown-menu" role="menu">

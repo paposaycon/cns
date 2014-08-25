@@ -19,3 +19,8 @@ section {
 	margin-right: auto;
 	min-height: 50px;
 }
+
+.membertree-table div {
+	padding:  0 0;
+}
+

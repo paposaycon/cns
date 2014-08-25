@@ -70,8 +70,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $data;
 	}
 
+	public static function getDownline($id, $position)
+	{
+		$downline = User::where('directupline', '=', $id)->where('position', '=', $position)->get();
+
+		return $downline;
+	}
+
 	// This is the Unilevel downline
-	public static function getDownline($id)
+	public static function getDownline_delegated($id)
 	{
 		$users = User::where('directupline', '=', $id)->get();
 

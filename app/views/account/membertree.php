@@ -1,92 +1,38 @@
 <?= View::make('common.header', array('page_title' => $page_title))->render(); ?>
-
-<section class="col-sm-8 membertree-table">
+<?php //var_dump($lvl[6]); ?>
+<div class="row">
+<section class="col-sm-12 membertree-table">
 	<div class="row">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">1</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 wide"><?= $lvl['0']['0']['0']['username'] ?></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
 	</div>
 	<div class="row">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">2</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">2</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-	</div>
-	<div class="row">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">3</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">3 3</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">3</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-	</div>
-	<div class="row">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">4</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">4 4</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">4 4</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">4</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-	</div>
-	<div class="row">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">5</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">5 5</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">5 5</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">5 5</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">5</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-	</div>
-	<div class="row">
-		<div class="col-sm-1">6</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">6 6</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">6 6</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">6 6</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">6 6</div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1">6</div>
-		<div class="col-sm-1"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 wide"><?= $lvl['1']['0']['0']['username'] ?> | <?= $lvl['1']['0']['0']['position'] ?></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 wide"><?= $lvl['3']['0']['0']['username'] ?> | <?= $lvl['1']['0']['1']['position'] ?></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
+		<div class="col-sm-1 slim"></div>
 	</div>
 </section>
 
-<?php echo View::make('common.sidebar-right')->render(); ?>
+
+</div>
 
 <?= View::make('common.footer')->render(); ?>
