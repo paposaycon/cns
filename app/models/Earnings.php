@@ -40,8 +40,8 @@ class Earnings extends Eloquent {
     $total_earningsz = 0;
     for ($level=1; $level < $tree['limit']; $level++) {
 
-      if (isset($lvl[$level])) { 
-        $total_earningsz = $total_earningsz + count($tree['lvl'][$level]) * Config::get("mlm_config.account_value_lvl_$level")
+      if (isset($tree['lvl'][$level])) { 
+        $total_earningsz = $total_earningsz + count($tree['lvl'][$level]) * Config::get("mlm_config.account_value_lvl_$level");
 
       } else { } 
 
