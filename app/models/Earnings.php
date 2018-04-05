@@ -2,207 +2,225 @@
 
 class Earnings extends Eloquent {
 
-	protected $table = 'earnings';
+  protected $table = 'earnings';
 
-	public static function checkLastupdate($id)
-	{
-		$updated_at = Earnings::where('user_id', '=', $id)->pluck('updated_at');
+  public static function checkLastupdate($id)
+  {
+    $updated_at = Earnings::where('user_id', '=', $id)->pluck('updated_at');
 
-		return $updated_at;
-	} 
+    return $updated_at;
+  } 
 
-	public static function getAvailablebalance($id)
-	{	
-		$total_requests = 0;
-	    $earnings = Earnings::getEarnings($id);
-	    $withdrew = Withdraw::getRequests($id);
+  public static function getAvailablebalance($id)
+  { 
+    $total_requests = 0;
+      $earnings = Earnings::getEarnings($id);
+      $withdrew = Withdraw::getRequests($id);
 
-	    foreach ($withdrew as $each) {
-	    	$total_requests = $total_requests + $each['request'];
-	    }
+      foreach ($withdrew as $each) {
+        $total_requests = $total_requests + $each['request'];
+      }
 
-	    $balance = $earnings - $total_requests;
+      $balance = $earnings - $total_requests;
 
-	    return $balance;
-	}
+      return $balance;
+  }
 
-	public static function getEarnings($id)
-	{
-		$earnings = Earnings::where('user_id', '=', $id)->pluck('earnings');
+  public static function getEarnings($id)
+  {
+    $earnings = Earnings::where('user_id', '=', $id)->pluck('earnings');
 
-		return $earnings;
-	}
+    return $earnings;
+  }
 
-	public static function getUserEarning($id)
-	{	
-		$earnings = -1;
-		$master = User::find($id);
+  public static function getUserEarning($id)
+  {
+    $tree = User::tree($id);
 
-		$lvl['0']['0'] = array(
-			'id' => $master->id,
-		);
+    $total_earningsz = 0;
+    for ($level=1; $level < $tree['limit']; $level++) {
 
-		for ($level=0; $level < 30; $level++) { 
-			
-			if (isset($lvl[$level])) 
-			{
-				if ($level > 1) 
-				{
-					$prevcount = count($lvl[$level]);
-				}
-				else if ($level == 0) 
-				{
-					$prevcount = 1;
-				}
-				else if ($level == 1) 
-				{
-					$prevcount = count($lvl[$level]);
-				}
-			}
-			
-			for ($group=0; $group < $prevcount; $group++) { 
-				
-				$makelevel = $level + 1;
+      if (isset($lvl[$level])) { 
+        $total_earningsz = $total_earningsz + count($tree['lvl'][$level]) * Config::get("mlm_config.account_value_lvl_$level")
 
-				if (isset($lvl[$level])) 
-				{
-					$user = User::getCnsstatement($lvl[$level][$group]['id']);
+      } else { } 
 
-					foreach ($user as $data) {
-						$lvl[$makelevel][] = array(
-							'id' => $data->id,
-						);
-					}
+    }
 
-					$earnings = $earnings + 1;
-				}
-				else
-				{
-					$level = 30;
-				}
-			}
-		}
+    return $total_earningsz;
 
-		return $earnings;
-	}
+  }
 
-	public static function getUnilevelEarning($id)
-	{
-		$total_earnings = 0;
-		$totalVp = 0;
-		$count = 0;
-		$levelLimit = 10;
+  // public static function getUserEarning($id)
+  // { 
+  //   $earnings = -1;
+  //   $master = User::find($id);
 
-		$master = User::find($id);
-		$total_members = -1;
-		$total_earnings = $total_earnings + 0;
+  //   $lvl['0']['0'] = array(
+  //     'id' => $master->id,
+  //   );
 
-		$lvl['0']['0'] = array(
-			'id'        => $master->id,
-			'vp'        => $master->vp,
-		);
+  //   for ($level=0; $level < 30; $level++) { 
+      
+  //     if (isset($lvl[$level])) 
+  //     {
+  //       if ($level > 1) 
+  //       {
+  //         $prevcount = count($lvl[$level]);
+  //       }
+  //       else if ($level == 0) 
+  //       {
+  //         $prevcount = 1;
+  //       }
+  //       else if ($level == 1) 
+  //       {
+  //         $prevcount = count($lvl[$level]);
+  //       }
+  //     }
+      
+  //     for ($group=0; $group < $prevcount; $group++) { 
+        
+  //       $makelevel = $level + 1;
 
-		for ($level=0; $level < $levelLimit; $level++) { 
-			
-			if (isset($lvl[$level])) 
-			{
-				if ($level > 1) 
-				{
-					$prevcount = count($lvl[$level]);
-				}
-				else if ($level == 0) 
-				{
-					$prevcount = 1;
-				}
-				else if ($level == 1) 
-				{
-					$prevcount = count($lvl[$level]);
-				}
-			}
-			
-			for ($group=0; $group < $prevcount; $group++) { 
-				
-				$makelevel = $level + 1;
+  //       if (isset($lvl[$level])) 
+  //       {
+  //         $user = User::getCnsstatement($lvl[$level][$group]['id']);
 
-				if (isset($lvl[$level])) 
-				{
-					$user = User::getUnilevel($lvl[$level][$group]['id']);
-					
-					foreach ($user as $data) {
+  //         foreach ($user as $data) {
+  //           $lvl[$makelevel][] = array(
+  //             'id' => $data->id,
+  //           );
+  //         }
 
-						$earnings = 0;
-						$lvlfixfifference = 1;
-						if ($makelevel == 1) {
-							$earnings = $data->vp*10;
-							$total_earnings = $total_earnings + $earnings;
-						} elseif ($makelevel > 1-$lvlfixfifference && $makelevel <= 4) {
-							$earnings = $data->vp * 1;
-							$total_earnings = $total_earnings + $earnings;
-						} elseif ($makelevel > 4-$lvlfixfifference && $makelevel <= 10) {
-							$earnings = $data->vp * 1;
-							$total_earnings = $total_earnings + $earnings;
-						}
+  //         $earnings = $earnings + 1;
+  //       }
+  //       else
+  //       {
+  //         $level = 30;
+  //       }
+  //     }
+  //   }
 
-						$totalVp = $totalVp + $data->vp;
+  //   return $earnings;
+  // }
 
-						$lvl[$makelevel][] = array(
-							'id'        => $data->id,
-							'vp'        => $data->vp,
-						);
+  public static function getUnilevelEarning($id)
+  {
+    $total_earnings = 0;
+    $totalVp = 0;
+    $count = 0;
+    $levelLimit = 10;
 
-					}
+    $master = User::find($id);
+    $total_members = -1;
+    $total_earnings = $total_earnings + 0;
 
-					$total_members = $total_members + 1;
-				}
-				else
-				{
-					$level = 30;
-				}
-			}
-		}
+    $lvl['0']['0'] = array(
+      'id'        => $master->id,
+      'vp'        => $master->vp,
+    );
 
-		return $total_earnings;
+    for ($level=0; $level < $levelLimit; $level++) { 
+      
+      if (isset($lvl[$level])) 
+      {
+        if ($level > 1) 
+        {
+          $prevcount = count($lvl[$level]);
+        }
+        else if ($level == 0) 
+        {
+          $prevcount = 1;
+        }
+        else if ($level == 1) 
+        {
+          $prevcount = count($lvl[$level]);
+        }
+      }
+      
+      for ($group=0; $group < $prevcount; $group++) { 
+        
+        $makelevel = $level + 1;
 
-	}
+        if (isset($lvl[$level])) 
+        {
+          $user = User::getUnilevel($lvl[$level][$group]['id']);
+          
+          foreach ($user as $data) {
 
-	public static function addEarnings($data)
-	{
-		$id = $data['user_id'];
-		$earnings = $data['earnings'];
+            $earnings = 0;
+            $lvlfixfifference = 1;
+            if ($makelevel == 1) {
+              $earnings = $data->vp*10;
+              $total_earnings = $total_earnings + $earnings;
+            } elseif ($makelevel > 1-$lvlfixfifference && $makelevel <= 4) {
+              $earnings = $data->vp * 1;
+              $total_earnings = $total_earnings + $earnings;
+            } elseif ($makelevel > 4-$lvlfixfifference && $makelevel <= 10) {
+              $earnings = $data->vp * 1;
+              $total_earnings = $total_earnings + $earnings;
+            }
 
-		$check_user = DB::table('earnings')->where('user_id', '=', $id)->get();
-		
-		$newcount = 0;
+            $totalVp = $totalVp + $data->vp;
 
-		foreach ($check_user as $each) {
-			$newcount = $each->updatecount + 1;
-			$earnings_id = $each->id;
-		}		
+            $lvl[$makelevel][] = array(
+              'id'        => $data->id,
+              'vp'        => $data->vp,
+            );
 
-		if(count($check_user) > 0)
-		{
-			$find_earnings = Earnings::find($earnings_id);
+          }
 
-			$find_earnings->earnings = $earnings;
-			$find_earnings->updatecount = $newcount;
-			$find_earnings->save();
+          $total_members = $total_members + 1;
+        }
+        else
+        {
+          $level = 30;
+        }
+      }
+    }
 
-			$result = 1;
-		}
-		else
-		{
-			$earnings = new Earnings;
+    return $total_earnings;
 
-			foreach ($data as $key => $value) {
-				$earnings->$key = $value;
-			}
-			
-			$earnings->save();
+  }
 
-			$result = 1;
-		}
+  public static function addEarnings($data)
+  {
+    $id = $data['user_id'];
+    $earnings = $data['earnings'];
 
-		return $result;
-	}
+    $check_user = DB::table('earnings')->where('user_id', '=', $id)->get();
+    
+    $newcount = 0;
+
+    foreach ($check_user as $each) {
+      $newcount = $each->updatecount + 1;
+      $earnings_id = $each->id;
+    }   
+
+    if(count($check_user) > 0)
+    {
+      $find_earnings = Earnings::find($earnings_id);
+
+      $find_earnings->earnings = $earnings;
+      $find_earnings->updatecount = $newcount;
+      $find_earnings->save();
+
+      $result = 1;
+    }
+    else
+    {
+      $earnings = new Earnings;
+
+      foreach ($data as $key => $value) {
+        $earnings->$key = $value;
+      }
+      
+      $earnings->save();
+
+      $result = 1;
+    }
+
+    return $result;
+  }
 
 }
