@@ -15,12 +15,76 @@ class AccountController extends BaseController {
 	|
 	*/
 
+
+	
+
+	
 	public function showProfile()
 	{
+
+		$me = User::find(Auth::user()->id);
+
+		$bankinformation = unserialize($me->bankinformation);
+
+		$withdrawal_requests = 0;
+		$total_amount = 0;
+		$requests_by_group = array(
+			'id'       => null,
+			'username' => null,
+			'name'     => null,
+			'last_update' => null,
+			'status'   => null,
+			'group'    => null,
+		);
+		$last_update = null;
+		$request_status = null;
+		$gateway = '';
+
+		$requester = WithdrawRequestedBy::getUserrequest(Auth::user()->id);
+
+		foreach ($requester as $my_request) 
+		{
+			$last_update = $my_request->updated_at;
+			$request_status = $my_request->status;
+		}
+		
+		$requests_by_group = array( 
+			'id'       => Auth::user()->id,
+			'username' => DB::table('users')->where('id', '=', Auth::user()->id)->pluck('username'),
+			'name'     => DB::table('users')->where('id', '=', Auth::user()->id)->pluck('firstname') . ' ' . DB::table('users')->where('id', '=', Auth::user()->id)->pluck('lastname'),
+			'last_update' => $last_update,
+			'status'   => $request_status,
+			'group'    => Withdraw::getRequestsfrom(Auth::user()->id),
+		);
+	
+		foreach ($requests_by_group['group'] as $each) 
+		{
+			$total_amount = $total_amount + $each['request'];
+			$gateway = $each['gateway'];
+		}
+
+
 		return View::make('account/profile', array(
 			'page_title' => 'Profile',
-
+			'me'         => $me,
+			'my_gateway' => $bankinformation,
+			'requests_by_group'    => $requests_by_group,
+			'total_amount'         => $total_amount,
+			'gateway'              => $gateway,
 		));
+	}
+
+	public function showRegister()
+	{
+		$master_accounts = User::getMasteraccounts();
+
+		$result = Codes::getCode(Input::get('activationcode'));
+
+		return View::make('account/register', array(
+			'activationcode'  => Input::get('activationcode'),
+			'im_master'       => $result['im_master'],
+			'master_accounts' => $master_accounts,			
+		))->render();
 	}
 
 	public function addUser() 
@@ -37,10 +101,10 @@ class AccountController extends BaseController {
 				'sponsor'   => Input::get('sponsor'),
 		    ),
 		    array(
-		        'username'  => 'required|min:4|unique:users,username',
+		        'username'  => 'required|min:3|unique:users,username',
 		        'firstname' => 'required|min:2',
 		        'lastname'  => 'required|min:2',
-		        'password'  => 'required|min:8',
+		        'password'  => 'required|min:5',
 		        // 'email'     => 'required|email|unique:users',
 		        'directupline' => 'required',
 		        'sponsor'   => 'required',
@@ -66,11 +130,10 @@ class AccountController extends BaseController {
 
 			foreach ($codevalidation as $codeinfo) {
 				$membertype = $codeinfo['membertype'];
+				$im_master  = $codeinfo['im_master'];
 				$sponsor_id = $codeinfo['sponsor'];
 				$code_id    = $codeinfo['code_id'];
 			}
-
-			$codeupdate = Codes::updateCode($code_id, 'used');
 
 			$codedata = array(
 				'status' => 1,
@@ -86,8 +149,17 @@ class AccountController extends BaseController {
 				$position = $position + 1;
 			}
 
+			$bankinformation = array(
+				'b_bank'      => Input::get('b_bank'),
+				'bankname'    => Input::get('bankname'),
+				'bankaccount' => Input::get('bankaccount'),
+				'b_palawan'   => Input::get('b_palawan'),
+				'b_western'   => Input::get('b_western'),
+			);
+
 			$userdata = array(
 				'membertype'=> $membertype,
+				'master_account' => Input::get('master_account'),
 				'username'  => Input::get('username'),
 				'firstname' => Input::get('firstname'),
 				'lastname'  => Input::get('lastname'),
@@ -96,8 +168,14 @@ class AccountController extends BaseController {
 				'directupline' => Input::get('direct_upline'),
 				'sponsor'   => Input::get('sponsor'),
 				'position'  => $position,
+				'phonenumber' => Input::get('phonenumber'),
+				'im_master' => $im_master,
+				'regcode_used' => Input::get('activationcode'),
+				'bankinformation' => serialize($bankinformation), // $string_to_array = unserialize($column_array);
 			);
 
+
+			$codeupdate = Codes::updateCode($code_id, 'used');
 			$result = User::addUser($userdata);
 
 			return $result;
@@ -112,29 +190,44 @@ class AccountController extends BaseController {
 		$field = Input::get('field');
 
 		if ($field == 'common') {
+			
+			$bankinformation = array(
+				'b_bank'      => Input::get('b_bank'),
+				'bankname'    => Input::get('bankname'),
+				'bankaccount' => Input::get('bankaccount'),
+				'b_palawan'   => Input::get('b_palawan'),
+				'b_western'   => Input::get('b_western'),
+			);
+
 			$userdata = array(
+				'master_account' => Input::get('master_account'),
 				'username' => Input::get('username'),
 				'firstname' => Input::get('firstname'),
 				'middlename' => Input::get('middlename'),
 				'lastname' => Input::get('lastname'),
+				'phonenumber' => Input::get('phonenumber'),
 				'sex' => Input::get('sex'),
+				'bankinformation' => serialize($bankinformation), // $string_to_array = unserialize($column_array);
 			);
 
 			$input['username'] = Input::get('username');
 
 			// Must not already exist in the `email` column of `users` table
+
 			$rules = array('username' => 'unique:users,username');
 
 			$validator = Validator::make($input, $rules);
 
-			if ($validator->fails()) 
-			{
-			    return 'Username already exists.';
-			}
-			else
-			{
-				return json_encode(User::updateUser(Auth::user()->id, $userdata));
-			}
+
+			if (Input::get('username') != Auth::user()->username) {
+				if ($validator->fails()) 
+				{
+				    return 'Username already exists.';
+				    exit;
+				}
+			}			
+			return json_encode(User::updateUser(Auth::user()->id, $userdata));
+			exit;
 		}
 		if($field == 'password')
 		{
@@ -142,17 +235,48 @@ class AccountController extends BaseController {
 			{
 			   $userdata = array('password' => Hash::make(Input::get('newpassword')));
 			   return json_encode(User::updateUser(Auth::user()->id, $userdata));
+			   exit;
 			}
 			else
 			{
 				return 'Current Password is Invalid';
+				exit;
 			}
 		}
 	}
-
+	public function findUsers()
+	{
+		
+	}
+	
 	public function getUsers()
 	{
 		return json_encode(User::getUsers());
+	}
+	
+	public function showChildrenaccounts()
+	{	
+		if (Auth::check()) 
+		{
+			$total_earnings = 0;
+			$total_withdrew = 0;
+			$children_accounts = User::getChildrenUsers(Auth::user()->id);
+			
+			foreach ($children_accounts as $child) {
+				$total_earnings = $total_earnings + Earnings::getEarnings($child['id']);	
+				$total_withdrew = $total_withdrew + Withdraw::getRequestvalue($child['id']);
+			}
+
+			return View::make('modules.childrenaccountslist', array(
+				'children_accounts' => $children_accounts,
+				'total_earnings'	=> $total_earnings,
+				'total_withdrew'    => $total_withdrew,
+ 			))->render();;
+		}
+		else
+		{
+			return Redirect::to('/')->with('message', 'You need to login.');
+		}
 	}
 
 	public function login()
@@ -189,7 +313,7 @@ class AccountController extends BaseController {
 		User::logout();
 		Session::flush();
 
-		return 'Logged out';
+		return Redirect::to('/')->with('message', 'You are logged out.');
 	}
 
 }

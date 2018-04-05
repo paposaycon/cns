@@ -1,22 +1,11 @@
 <div class="row">
 	<div class="activation-codes col-md-12 col-sm-12">
 		<div class="jumbotron">
-			<div class="form">
-				<div class="title">
-					<h3><strong>Codes Generation Area</strong></h3>
-				</div>
-				<div class="form-group">
-					<label for="formemebertype">Member Type</label>
-					<select name="membertype" id="formembertype" class="form-control">
-						<option value="admin">Admin</option>
-						<option value="center">Center</option>
-						<option value="member">Member</option>
-					</select>
-				</div>
-			</div>
-			<div class='generate-form-btn' style="text-align: center;">
-				<button class="btn btn-lg btn-primary" id="generate-codes">Hit me!</button>
-				<span class="info"></span>
+			<div class="form" style="text-align: center;">
+				<div class="alert alert-success">You have <?= Auth::user()->codecount ?> Codes ready to generate.</div>
+				<div class="alert alert-warning">You have <?= Auth::user()->codecount_master ?> Master Account Codes ready to generate.</div>
+				<button class="btn btn-lg btn-primary" id="generate-codes">GENERATE CODES NOW!</button>
+				<br><div class="info alert alert-danger" style="display:none;"></div>
 			</div>
 		</div>
 	</div>
@@ -36,10 +25,13 @@
 					</tr>
 				</thead>
 				<tbody>
+				<?php foreach ($codes as $code) { ?>
 					<tr>
-						<td></td>
-						<td></td>
+						<td><?php if($code['membertype'] == 1) { echo 'Master'; } else {echo 'Regular'; } ?></td>
+						<td><?= $code['activationcode'] ?></td>
 					</tr>
+				<?php } ?>
+					
 				</tbody>
 			</table>
 		</div>
@@ -47,36 +39,25 @@
 </div>
 
 
+
+
 <script>
 
 	$(document).ready(function () {
-		refreshCodes();
-		function refreshCodes() {
-			$.ajax({
-				url:"<?= action('CodesController@showCodes') ?>",
-				type: 'POST',
-				success:function(result){
-					var htmldata;
-					var data = JSON.parse(result);
-					$.each(data, function(i, item) {
-						htmldata += '<tr><td>' + item.membertype + '</td><td>' + item.activationcode + '</td></tr>';
-					});
-					$('.activation-codes tbody').html(htmldata);
-				}
-			});
-		}
-
+		
 		$('#generate-codes').click(function () {
 
-			var $membertype = $('#formembertype').val(),
-				$count = $('#count').val();
+			<?php if ((Auth::user()->codecount < 1) && (Auth::user()->codecount_master < 1)) { ?>
+
+				$('div.info').html('Please order codes to generate.').slideDown('fast');
+
+			<?php } else { ?>
 
 			$.ajax({
-				url:"<?= action('CodesController@generateCode') ?>",
+				url:"<?= route('generatecodes') ?>",
 				type: 'POST',
 				data: {
-					membertype : $membertype,
-					count : $count,
+					membertype : 'member',
 				},
 				beforeSend:function(){
 					$('.generate-form-btn').html('<button class="btn btn-lg btn-primary"> Generating codes</button>');
@@ -85,12 +66,17 @@
 				success:function(result){
 				    $('.form').slideUp('fast');
 				    $('.generate-form-btn').html('<button class="btn btn-lg btn-primary">' + result + '</button>');
+
 				    location.reload(true); 
 				}
 			});
 
+			<?php } ?>
+
 		});
+		
 		
 	});
 	
 </script>
+

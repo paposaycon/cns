@@ -1,12 +1,28 @@
 <?= View::make('common.header', array('page_title' => $page_title))->render(); ?>
 
+<section class="media-section darkbg" data-height="220" data-type="kenburns">
+    <div class="media-section-image-container">
+        <img src="<?= asset('theme/assets/images/mlm/banner-2.jpg'); ?>" alt="image">
+    </div>
+
+    <div class="inner">
+        <div class="text-center">
+            <h2 class="uppercase">This is your Profile</h2>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="row">
+        <div class="col-sm-12">
+
 <?php 
 if (Auth::check()) 
 { 
 ?>
-<div class="row">
-<section id="profile" class="col-md-8 col-sm-8">
+<div id="profile" class="col-sm-4">
 	<h3>Account Details</h3>
+	<b>MASTER ACCOUNT</b>: <?= Config::get('mlm_config.id_prefix') ?><?= Auth::user()->master_account ?> <br>
 	ID: <?= Config::get('mlm_config.id_prefix') ?><?= Auth::user()->id ?> <br>
 	Username: <?= Auth::user()->username ?> <br>
 	Email: <?= Auth::user()->email ?> <br>
@@ -14,9 +30,26 @@ if (Auth::check())
 	First Name: <?= Auth::user()->firstname ?> <br>
 	Middle Name: <?= Auth::user()->middlename ?> <br>
 	Last Name: <?= Auth::user()->lastname ?> <br>
+	Phone Number: <?= Auth::user()->phonenumber ?> <br>
 	Gender: <?= Auth::user()->sex ?> <br>
 	Direct Upline: <?= Auth::user()->directupline ?> <br>
 	Sponsor: <?= Auth::user()->sponsor ?> <br>
+	<br>
+	<strong>Withdrawal Gateway:</strong> <br>
+	<?php if ($my_gateway['b_palawan'] != ''): ?>
+	<i class="fa fa-check-square-o"></i> <strong>Palawan Pawnshop</strong> <br>
+	<?php endif ?>
+	<?php if ($my_gateway['b_western'] != ''): ?>
+	<i class="fa fa-check-square-o"></i> <strong>Mlhullier (Western Union)</strong> <br>
+	<?php endif ?>
+	<?php if ($my_gateway['b_bank'] != ''): ?>
+	<i class="fa fa-check-square-o"></i> <strong>Bank</strong> <br>
+	<ul>
+		<li>Bank Name: <?= $my_gateway['bankname']; ?></li>
+		<li>Bank Account: <?= $my_gateway['bankaccount']; ?></li>
+	</ul>
+	<?php endif ?>
+	<br>
 	Registered at: <?= Auth::user()->created_at ?> <br>
 	Last Account Update: <?= Auth::user()->updated_at ?>
 
@@ -62,11 +95,53 @@ if (Auth::check())
 							</div>
 						</div>
 						<div class="row">
-							<div class="form-group col-md-12">
+							<div class="form-group col-md-6">
+								<label for="update-pn">Phone Number</label>
+								<input type="text" class="form-control" name="update-lastname" id="update-pn" value="<?= Auth::user()->lastname ?>" autocomplete="off">
+							</div>
+							<div class="form-group col-md-6">
 								<label for="update-sex">Gender</label>
 								<input type="text" class="form-control" name="update-sex" id="update-sex" value="<?= Auth::user()->sex ?>" autocomplete="off">
 							</div>
 						</div>
+					    <div class="row">
+					        <div class="form-group col-md-6">
+					            <label><strong>Withdrawal Gateway</strong></label>
+					            <div class="checkbox">
+					                <label>
+					                    <input id="myprofile-check-palawan" type="checkbox" value="Palawan Pawnshop" <?php if ($my_gateway['b_palawan'] != '') echo 'checked'; ?>>
+					                    Palawan Pawnshop
+					                </label>
+					            </div>
+					            <div class="checkbox">
+					                <label>
+					                    <input id="myprofile-check-western" type="checkbox" value="Mlhullier (Western Union)" <?php if ($my_gateway['b_western'] != '') echo 'checked'; ?>>
+					                    Mlhullier (Western Union)
+					                </label>
+					            </div>
+					            <div class="checkbox">
+					                <label>
+					                    <input id="myprofile-check-bank" type="checkbox" value="Bank" <?php if ($my_gateway['b_bank'] != '') echo 'checked'; ?>>
+					                    Bank (We only serve BDO, BPI and Metrobank for now)
+					                </label>
+					            </div>
+					        </div>
+					        <div id="myprofile-form-bank" style="display: none;">
+					            <div class="form-group col-md-6">
+					                <div class="input-group">
+					                    <div class="input-group-addon">Bank Name</div>
+					                    <input type="text" class="form-control" name="myprofile-bankname" id="myprofile-bankname" value="<?= $my_gateway['bankname'] ?>">
+					                </div>
+					            </div>
+					            <div class="form-group col-md-6">
+					                <div class="input-group">
+					                    <div class="input-group-addon">Account #</div>
+					                    <input type="text" class="form-control" name="myprofile-bankaccount" id="myprofile-bankaccount" value="<?= $my_gateway['bankaccount'] ?>">
+					                </div>
+					            </div>
+					        </div>
+					    </div> 
+					    
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -117,12 +192,68 @@ if (Auth::check())
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	<!-- Change password Modal - END-->
-
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos quis modi optio vero sit, accusantium suscipit voluptatibus commodi nisi id nobis harum esse nam inventore consequatur ut, quo dolore animi. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa atque ducimus quisquam maxime, quos officiis velit cum iure quidem inventore hic voluptatibus facilis esse nisi commodi accusantium ut! Ut, similique!
-</section>
-
-<?php echo View::make('common.sidebar-right')->render(); ?>
 </div>
+<?php if ($total_amount != 0) { ?>
+
+<div class="col-sm-8">
+	<h3>Withdrawal Status:</h3>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<td>ID</td>
+				<td>Username</td>
+				<td>Request</td>
+				<td>Gateway</td>
+				<td>Status</td>
+				<td>Action</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><?= Config::get('mlm_config.id_prefix') ?><?= $requests_by_group['id'] ?></td>
+				<td><?= $requests_by_group['username'] ?></td>
+				<td><?= $total_amount ?></td>
+				<td><?= $gateway ?></td>
+				<td><?= $requests_by_group['status'] ?></td>
+				<td><a class="fake-link" id="profile-show-breakdown">Show Breakdown</a></td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<div style="display:none;" id="profile-withdrawal-breakdown">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>ID</td>
+									<td>Username</td>
+									<td>Request</td>
+									<td>Gateway</td>
+									<td>Status</td>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($requests_by_group['group'] as $each) { ?>
+								<tr>
+									<td><?= Config::get('mlm_config.id_prefix') ?><?= $each['user_id'] ?></td>
+									<td><?= DB::table('users')->where('id', '=', $each['user_id'])->pluck('username') ?></td>
+									<td><?= $each['request'] ?></td>
+									<td><?= $each['gateway'] ?></td>
+									<td><?= $each['status'] ?></td>
+								</tr>
+								<?php } ?>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+</div>
+<?php } ?>
+</div>
+
+<?php echo View::make('common.sidebar-right', array('page_title' => $page_title))->render(); ?>
+
 <?php }
 else 
 {
@@ -132,14 +263,35 @@ else
 
 <script>
 	$(document).ready(function () {
+		$('#profile-show-breakdown').click(function () {
+			$('#profile-withdrawal-breakdown').toggle();
+		});
+	});
+</script>
+
+<script>
+	$(document).ready(function () {
 		
+		if ($('#myprofile-check-bank').is(':checked')) {
+            $('#myprofile-form-bank').show('fast');
+        }
+
+		$("#myprofile-check-bank").change(function () {
+            if ($('#myprofile-check-bank').is(':checked')) {
+                $('#myprofile-form-bank').show('fast');
+            }
+            else {
+                 $('#myprofile-form-bank').hide('fast');
+            }
+        });
+
 		// Validator
 		function validateUsername(data) {
-			var pattern = /^[a-z0-9]{6,}/i;
+			var pattern = /^[a-z0-9]{3,}/i;
 			return pattern.test(data);
 		}
 		function validateName(data) {
-			var pattern = /^[a-z0-9]{2,}/i;
+			var pattern = /^[a-z0-9]{1,}/i;
 			return pattern.test(data);
 		}
 		function validateSponsor(data) {
@@ -154,19 +306,42 @@ else
 		}
 
 		$('#submit-profile-changes').click(function() {
+
+			var b_bank = "",
+                bankname = "",
+                bankaccount = "",
+                b_palawan = "",
+                b_western = "";
+
+            if ($('#myprofile-form-bank').is(':visible') && $('#myprofile-check-bank').is(':checked')) {
+                b_bank = $('#myprofile-check-bank').val(); 
+                bankname = $('#myprofile-bankname').val();
+                bankaccount = $('#myprofile-bankaccount').val();                    
+            }
+
+            if ($('#myprofile-check-palawan').is(':checked')) {
+                b_palawan = 'Palawan Pawnshop';
+            }
+
+            if ($('#myprofile-check-western').is(':checked')) {
+                b_western = 'Mlhullier (Western Union)';
+            }
+
+
 			var username = $('#update-username').val(),
 				firstname = $('#update-firstname').val(),
 				middlename = $('#update-middlename').val(),
 				lastname = $('#update-lastname').val(),
+				phonenumber = $('#update-pn').val(),
 				sex = $('#update-sex').val(),
 				errormsg = '';
 
 			function addError(data) {
 				errormsg += data + "<br>";
 			}
-			validateUsername(username) || addError('*Username must be at least 6 characters(Also use alphanumeric characters)');
+			validateUsername(username) || addError('*Username must be at least 3 characters(Also use alphanumeric characters)');
 			validateName(firstname) || addError('*First name should be at least 2 characters');
-			validateName(middlename) || addError('*Last name should be at least 2 characters');
+			validateName(middlename) || addError('*Middle name should be at least 1 character');
 			validateName(lastname) || addError('*Last name should be at least 2 characters');
 			$('.editprofile-error').html('<div class="alert alert-danger">' + errormsg + '</div>');
 			errormsg == '' && updateProfile();
@@ -182,7 +357,13 @@ else
 						firstname : firstname,
 						middlename : middlename,
 						lastname : lastname,
-						sex : sex
+						phonenumber : phonenumber,
+						sex : sex,
+						b_bank : b_bank,
+                        bankname : bankname,
+                        bankaccount : bankaccount,
+                        b_palawan : b_palawan,
+                        b_western : b_western,
 					},
 					beforeSend:function(){
 						$('#submit-profile-changes').html('Verifying and Saving');
@@ -208,7 +389,7 @@ else
 		// Validator
 		function validatePassword(data) {
 			if (data != undefined){
-				if (data.length > 7) {
+				if (data.length > 4) {
 					return true;
 				}
 			}
@@ -227,7 +408,7 @@ else
 				errormsg += data + "<br>";
 			}
 
-			validatePassword(newpassword) || addError('*Password must be at least 8 characters');
+			validatePassword(newpassword) || addError('*Password must be at least 5 characters');
 			newpassword == confirmnewpassword || addError('New Password does not match');
 			errormsg == '' && updatePassword();
 			$('.changepassword-error').html('<div class="alert alert-danger">' + errormsg + '</div>');
