@@ -37,7 +37,7 @@ class EarningsController extends BaseController {
 		}
 		else // more than 12 hours ago
 		{
-			$earnings = Earnings::getUserEarning(Auth::user()->id) ; 
+			$earnings = Earnings::getUserEarning($id) ; 
 			$unilevelEarnings = Earnings::getUnilevelEarning($id)*0; 
 
 			$total_earnings = $earnings + $unilevelEarnings;
