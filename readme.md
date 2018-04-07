@@ -3,4 +3,4 @@ _____________________________________
 
 Opensource MLM system. Under dev.
 
-[http://www.adzbite.com]
+[http://www.adzbyte.com]
